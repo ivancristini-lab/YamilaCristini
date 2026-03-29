@@ -1,0 +1,32 @@
+# Sistema operativo
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+Thumbs.db
+ehthumbs.db
+desktop.ini
+
+# Editores
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Fotos originales / alta resolución (no subir)
+img/originales/
+img/raw/
+*.psd
+*.ai
+*.raw
+
+# Archivos temporales
+*.tmp
+*.temp
+*.log
+
+# Node (por si se agrega algo en el futuro)
+node_modules/
+npm-debug.log*
