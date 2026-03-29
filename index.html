@@ -1,0 +1,959 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>YC Nails Studio — Yamila Cristini</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+/* ─── RESET & VARIABLES ─────────────────────────────────── */
+*{margin:0;padding:0;box-sizing:border-box;}
+:root{
+  --negro:#0a0a0f;
+  --negro2:#13111a;
+  --crema:#faf7f4;
+  --crema2:#f0ebe4;
+  --crema3:#e4dbd2;
+  --dorado:#c9a84c;
+  --dorado2:#e8cc7a;
+  --rosa:#c4637e;
+  --rosa-claro:#e8a0b4;
+  --rosa-suave:#f5e0e7;
+  --plateado:#d0cfe8;
+  --blanco:#ffffff;
+  --texto:#1e1520;
+  --texto2:#4a3f48;
+  --texto3:#6e6070;
+}
+html{scroll-behavior:smooth;}
+body{font-family:'Montserrat',sans-serif;background:var(--crema);color:var(--texto);overflow-x:hidden;}
+
+/* ─── CURSOR ─────────────────────────────────────────────── */
+body{cursor:none;}
+#cur{position:fixed;width:8px;height:8px;background:var(--dorado);border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);transition:transform .1s;}
+#cur-ring{position:fixed;width:28px;height:28px;border:1px solid rgba(201,168,76,.4);border-radius:50%;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);transition:all .18s ease;}
+@media(hover:none){#cur,#cur-ring{display:none;}body{cursor:auto;}}
+
+/* ─── NAV ─────────────────────────────────────────────────── */
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:100;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:1.2rem 2.5rem;
+  background:rgba(10,10,15,0);
+  border-bottom:0.5px solid rgba(201,168,76,0);
+  transition:all .4s ease;
+}
+nav.scrolled{
+  background:rgba(10,10,15,.92);
+  border-bottom-color:rgba(201,168,76,.15);
+  backdrop-filter:blur(12px);
+}
+.nav-logo{
+  font-family:'Cormorant Garamond',serif;
+  font-size:22px;font-weight:400;
+  color:var(--dorado);letter-spacing:.05em;
+  text-decoration:none;cursor:none;
+}
+.nav-links{display:flex;align-items:center;gap:2rem;}
+.nav-links a{
+  font-size:10px;font-weight:500;letter-spacing:.22em;text-transform:uppercase;
+  color:rgba(250,247,244,.6);text-decoration:none;
+  transition:color .25s;cursor:none;
+}
+.nav-links a:hover{color:var(--dorado);}
+.nav-cta{
+  font-size:10px;font-weight:500;letter-spacing:.2em;text-transform:uppercase;
+  padding:9px 20px;border:0.5px solid var(--dorado);border-radius:2px;
+  color:var(--dorado);text-decoration:none;cursor:none;
+  transition:all .3s ease;
+}
+.nav-cta:hover{background:var(--dorado);color:var(--negro);}
+.nav-menu{display:none;flex-direction:column;gap:5px;cursor:pointer;background:none;border:none;padding:4px;}
+.nav-menu span{width:22px;height:1.5px;background:var(--dorado);display:block;transition:all .3s;}
+@media(max-width:700px){
+  .nav-links{display:none;}
+  .nav-menu{display:flex;}
+}
+
+/* ─── MOBILE MENU ────────────────────────────────────────── */
+.mobile-nav{
+  position:fixed;inset:0;background:rgba(10,10,15,.97);z-index:99;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2rem;
+  opacity:0;pointer-events:none;transition:opacity .3s;
+}
+.mobile-nav.open{opacity:1;pointer-events:all;}
+.mobile-nav a{
+  font-family:'Cormorant Garamond',serif;font-size:36px;font-weight:300;
+  color:var(--crema);text-decoration:none;letter-spacing:.05em;
+  transition:color .2s;cursor:none;
+}
+.mobile-nav a:hover{color:var(--dorado);}
+
+/* ─── HERO ────────────────────────────────────────────────── */
+#hero{
+  position:relative;min-height:100vh;
+  background:var(--negro);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  text-align:center;padding:6rem 2rem 4rem;overflow:hidden;
+}
+canvas#glitter{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:1;}
+.hero-glow{position:absolute;border-radius:50%;filter:blur(90px);pointer-events:none;z-index:0;}
+.glow1{width:500px;height:500px;background:radial-gradient(circle,rgba(196,99,126,.1),transparent 70%);top:-120px;right:-100px;}
+.glow2{width:400px;height:400px;background:radial-gradient(circle,rgba(201,168,76,.07),transparent 70%);bottom:-80px;left:-80px;}
+.hero-content{position:relative;z-index:10;max-width:700px;}
+.hero-eyebrow{
+  font-size:10px;font-weight:500;letter-spacing:.38em;text-transform:uppercase;
+  color:var(--dorado);margin-bottom:1.4rem;
+  opacity:0;animation:fadeUp 1s ease .2s forwards;
+}
+.hero-title{
+  font-family:'Cormorant Garamond',serif;
+  font-size:clamp(56px,10vw,115px);font-weight:300;line-height:.9;
+  margin-bottom:.2rem;
+  opacity:0;animation:fadeUp 1.1s ease .5s forwards;
+}
+.hero-title .grad{
+  background:linear-gradient(135deg,var(--dorado2),var(--dorado),var(--rosa-claro));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+}
+.hero-title .sub-it{
+  display:block;font-style:italic;font-size:.52em;
+  color:var(--rosa-claro);-webkit-text-fill-color:var(--rosa-claro);
+  background:none;letter-spacing:.1em;margin-top:.25em;
+}
+.hero-divider{
+  width:0;height:1px;
+  background:linear-gradient(90deg,transparent,var(--dorado),var(--rosa-claro),transparent);
+  margin:1.6rem auto;
+  animation:lineGrow 1.2s ease 1.2s forwards;
+}
+
+/* FOTO + NOMBRE */
+.hero-author{
+  display:flex;align-items:center;justify-content:center;gap:14px;
+  margin-bottom:1.4rem;
+  opacity:0;animation:fadeUp 1s ease 1.5s forwards;
+}
+.author-avatar{
+  width:68px;height:68px;border-radius:50%;
+  border:2px solid var(--dorado);
+  overflow:hidden;flex-shrink:0;
+  background:rgba(201,168,76,.1);
+  display:flex;align-items:center;justify-content:center;
+}
+.author-avatar img{width:100%;height:100%;object-fit:cover;display:block;}
+.author-avatar .initials{
+  font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:400;
+  color:var(--dorado);
+}
+.author-info{text-align:left;}
+.author-name{
+  font-family:'Cormorant Garamond',serif;font-size:18px;font-weight:400;
+  color:var(--blanco);letter-spacing:.04em;line-height:1.2;
+}
+.author-role{
+  font-size:10px;font-weight:400;letter-spacing:.22em;text-transform:uppercase;
+  color:var(--dorado);margin-top:3px;
+}
+
+.hero-tagline{
+  font-family:'Cormorant Garamond',serif;font-size:clamp(15px,2.2vw,20px);
+  font-weight:300;font-style:italic;color:var(--plateado);
+  letter-spacing:.04em;line-height:1.7;max-width:460px;margin:0 auto 2rem;
+  opacity:0;animation:fadeUp 1s ease 1.8s forwards;
+}
+.hero-pills{
+  display:flex;gap:10px;flex-wrap:wrap;justify-content:center;
+  margin-bottom:2rem;
+  opacity:0;animation:fadeUp 1s ease 2s forwards;
+}
+.pill{
+  font-size:9px;font-weight:500;letter-spacing:.2em;text-transform:uppercase;
+  padding:7px 16px;border-radius:20px;
+  border:0.5px solid rgba(201,168,76,.3);color:var(--dorado);
+  background:rgba(201,168,76,.05);transition:all .3s;cursor:none;
+}
+.pill:hover{background:rgba(201,168,76,.12);border-color:var(--dorado);}
+.pill.star{border-color:rgba(232,160,180,.35);color:var(--rosa-claro);background:rgba(232,160,180,.07);}
+.pill.star:hover{background:rgba(232,160,180,.15);}
+.hero-btns{
+  display:flex;gap:12px;justify-content:center;flex-wrap:wrap;
+  opacity:0;animation:fadeUp 1s ease 2.2s forwards;
+}
+.btn-gold{
+  display:inline-flex;align-items:center;gap:9px;
+  background:linear-gradient(135deg,var(--dorado),var(--dorado2));
+  color:var(--negro);font-family:'Montserrat',sans-serif;
+  font-size:10px;font-weight:600;letter-spacing:.2em;text-transform:uppercase;
+  padding:14px 26px;border-radius:2px;text-decoration:none;border:none;
+  cursor:none;transition:all .3s;
+}
+.btn-gold:hover{transform:translateY(-2px);box-shadow:0 10px 30px rgba(201,168,76,.3);}
+.btn-outline{
+  display:inline-flex;align-items:center;gap:9px;
+  border:0.5px solid rgba(208,207,232,.35);color:var(--plateado);
+  font-family:'Montserrat',sans-serif;font-size:10px;font-weight:400;
+  letter-spacing:.2em;text-transform:uppercase;padding:14px 22px;border-radius:2px;
+  text-decoration:none;cursor:none;transition:all .3s;
+}
+.btn-outline:hover{border-color:var(--rosa-claro);color:var(--rosa-claro);}
+.hero-location{
+  position:absolute;bottom:1.8rem;left:50%;transform:translateX(-50%);
+  font-size:9px;letter-spacing:.3em;color:rgba(208,207,232,.35);text-transform:uppercase;
+  opacity:0;animation:fadeUp 1s ease 2.5s forwards;
+}
+.scroll-hint{
+  position:absolute;bottom:1.8rem;right:2rem;
+  display:flex;flex-direction:column;align-items:center;gap:6px;
+  opacity:0;animation:fadeUp 1s ease 2.7s forwards;
+}
+.scroll-line{width:1px;height:38px;background:linear-gradient(to bottom,var(--dorado),transparent);animation:pulse 2s ease-in-out infinite;}
+.scroll-txt{font-size:8px;letter-spacing:.2em;color:rgba(201,168,76,.5);text-transform:uppercase;writing-mode:vertical-rl;}
+
+/* ─── SECTION SHARED ──────────────────────────────────────── */
+.section{padding:5.5rem 2rem 6rem;max-width:1080px;margin:0 auto;}
+.s-tag{font-size:9px;font-weight:600;letter-spacing:.4em;text-transform:uppercase;color:var(--dorado);display:flex;align-items:center;gap:10px;margin-bottom:.9rem;}
+.s-tag::before{content:'';width:26px;height:1.5px;background:var(--dorado);}
+.s-title{font-family:'Cormorant Garamond',serif;font-size:clamp(36px,5.5vw,66px);font-weight:300;line-height:1.05;color:var(--negro);margin-bottom:.4rem;}
+.s-title em{font-style:italic;background:linear-gradient(135deg,var(--dorado),var(--rosa));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.s-sub{font-size:14px;font-weight:400;line-height:1.75;color:var(--texto2);margin-bottom:3rem;max-width:500px;}
+.reveal{opacity:0;transform:translateY(24px);transition:opacity .8s ease,transform .8s ease;}
+.reveal.visible{opacity:1;transform:translateY(0);}
+
+/* ─── SERVICIOS ───────────────────────────────────────────── */
+#servicios{background:var(--crema);}
+.srv-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px;}
+.srv-card{
+  position:relative;border:0.5px solid rgba(201,168,76,.2);border-radius:3px;
+  padding:2rem 1.7rem;background:rgba(255,255,255,.6);overflow:hidden;
+  cursor:none;transition:all .4s cubic-bezier(.23,1,.32,1);
+}
+.srv-card::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(201,168,76,.05),transparent 60%);opacity:0;transition:opacity .4s;}
+.srv-card::after{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--dorado),transparent);transform:scaleX(0);transition:transform .5s;}
+.srv-card:hover{border-color:rgba(201,168,76,.45);background:rgba(255,255,255,.9);transform:translateY(-6px);box-shadow:0 20px 50px rgba(0,0,0,.07);}
+.srv-card:hover::before{opacity:1;}
+.srv-card:hover::after{transform:scaleX(1);}
+.srv-card.estrella{border-color:rgba(196,99,126,.3);background:rgba(245,224,231,.15);}
+.srv-card.estrella::before{background:linear-gradient(135deg,rgba(232,160,180,.08),transparent 60%);}
+.srv-card.estrella::after{background:linear-gradient(90deg,transparent,var(--rosa),transparent);}
+.srv-card.estrella:hover{border-color:rgba(196,99,126,.55);box-shadow:0 20px 50px rgba(196,99,126,.08);}
+.shimmer{position:absolute;top:0;left:-80%;width:55%;height:100%;background:linear-gradient(105deg,transparent,rgba(255,255,255,.35),transparent);transform:skewX(-15deg);pointer-events:none;}
+.srv-card:hover .shimmer{left:150%;transition:left .6s ease;}
+.star-badge{display:inline-flex;align-items:center;gap:5px;font-size:9px;font-weight:600;letter-spacing:.22em;text-transform:uppercase;color:var(--rosa);border:0.5px solid rgba(196,99,126,.35);padding:4px 10px;border-radius:20px;background:rgba(196,99,126,.07);margin-bottom:1.2rem;}
+.srv-num{position:absolute;top:1.2rem;right:1.5rem;font-family:'Cormorant Garamond',serif;font-size:52px;font-weight:300;color:rgba(0,0,0,.04);line-height:1;user-select:none;}
+.srv-icon{font-size:26px;margin-bottom:1rem;display:block;transition:transform .3s;}
+.srv-card:hover .srv-icon{transform:scale(1.1) rotate(-5deg);}
+.srv-name{font-family:'Cormorant Garamond',serif;font-size:24px;font-weight:400;color:var(--negro);margin-bottom:.5rem;}
+.srv-card.estrella .srv-name{background:linear-gradient(135deg,var(--negro),var(--rosa));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.srv-desc{font-size:13px;font-weight:300;line-height:1.8;color:var(--texto2);margin-bottom:1.4rem;}
+.srv-list{list-style:none;display:flex;flex-direction:column;gap:6px;margin-bottom:1.6rem;}
+.srv-list li{display:flex;align-items:center;gap:8px;font-size:12px;font-weight:400;color:var(--texto2);letter-spacing:.03em;}
+.srv-list li::before{content:'';width:4px;height:4px;border-radius:50%;background:var(--dorado);flex-shrink:0;}
+.srv-card.estrella .srv-list li::before{background:var(--rosa);}
+.srv-cta{display:inline-flex;align-items:center;gap:7px;font-size:9px;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:var(--dorado);text-decoration:none;border-bottom:0.5px solid rgba(201,168,76,.35);padding-bottom:2px;transition:all .3s;cursor:none;background:none;border-top:none;border-left:none;border-right:none;font-family:'Montserrat',sans-serif;}
+.srv-card.estrella .srv-cta{color:var(--rosa);border-bottom-color:rgba(196,99,126,.35);}
+.srv-cta:hover{gap:12px;}
+.srv-bottom{text-align:center;margin-top:2.5rem;}
+.btn-outline-dark{display:inline-flex;align-items:center;gap:8px;font-size:10px;font-weight:500;letter-spacing:.2em;text-transform:uppercase;color:var(--texto2);border:0.5px solid rgba(42,32,48,.25);padding:12px 24px;border-radius:2px;text-decoration:none;cursor:none;transition:all .3s;font-family:'Montserrat',sans-serif;background:none;}
+.btn-outline-dark:hover{border-color:var(--dorado);color:var(--dorado);}
+
+/* ─── GALERÍA ─────────────────────────────────────────────── */
+#galeria{background:var(--crema2);}
+.gal-header{display:flex;align-items:flex-end;justify-content:space-between;flex-wrap:wrap;gap:1rem;margin-bottom:2.5rem;}
+.ig-link{display:inline-flex;align-items:center;gap:6px;font-size:10px;font-weight:500;letter-spacing:.2em;text-transform:uppercase;color:var(--texto3);text-decoration:none;border-bottom:0.5px solid rgba(110,96,112,.3);padding-bottom:2px;transition:all .3s;cursor:none;align-self:flex-end;margin-bottom:8px;}
+.ig-link:hover{color:var(--rosa);border-bottom-color:var(--rosa);}
+.filters{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:2.2rem;}
+.fbtn{font-family:'Montserrat',sans-serif;font-size:9px;font-weight:500;letter-spacing:.18em;text-transform:uppercase;padding:7px 16px;border-radius:20px;border:0.5px solid rgba(42,32,48,.18);background:transparent;color:var(--texto3);cursor:none;transition:all .25s;}
+.fbtn:hover{border-color:var(--dorado);color:var(--dorado);}
+.fbtn.on{background:var(--negro);color:var(--crema);border-color:var(--negro);}
+.masonry{columns:3;column-gap:12px;}
+@media(max-width:700px){.masonry{columns:2;}}
+@media(max-width:440px){.masonry{columns:1;}}
+.gal-item{break-inside:avoid;margin-bottom:12px;position:relative;border-radius:3px;overflow:hidden;cursor:none;}
+.gal-ph{width:100%;display:block;background:var(--crema3);position:relative;overflow:hidden;}
+.gal-item:nth-child(1) .gal-ph{height:260px;}
+.gal-item:nth-child(2) .gal-ph{height:200px;}
+.gal-item:nth-child(3) .gal-ph{height:285px;}
+.gal-item:nth-child(4) .gal-ph{height:215px;}
+.gal-item:nth-child(5) .gal-ph{height:305px;}
+.gal-item:nth-child(6) .gal-ph{height:190px;}
+.gal-item:nth-child(7) .gal-ph{height:245px;}
+.gal-item:nth-child(8) .gal-ph{height:210px;}
+.gal-ph img{width:100%;height:100%;object-fit:cover;display:block;}
+.gal-ph .ph-inner{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;background:var(--crema3);}
+.gal-ph .ph-inner span{font-size:28px;opacity:.2;}
+.gal-ph .ph-inner small{font-size:10px;font-weight:400;letter-spacing:.15em;color:var(--texto3);text-transform:uppercase;}
+.gal-tag{position:absolute;bottom:10px;left:10px;font-size:9px;font-weight:500;letter-spacing:.12em;text-transform:uppercase;padding:4px 10px;border-radius:20px;background:rgba(250,247,244,.9);color:var(--texto3);backdrop-filter:blur(4px);}
+.gal-tag.st{background:rgba(245,224,231,.9);color:var(--rosa);}
+.gal-ov{position:absolute;inset:0;background:rgba(201,168,76,0);display:flex;align-items:center;justify-content:center;opacity:0;transition:all .4s cubic-bezier(.23,1,.32,1);}
+.gal-item:hover .gal-ov{opacity:1;background:rgba(201,168,76,.15);}
+.gal-item:hover .gal-ph img,.gal-item:hover .gal-ph .ph-inner{transform:scale(1.04);transition:transform .5s cubic-bezier(.23,1,.32,1);}
+.ov-icon{width:38px;height:38px;border-radius:50%;background:rgba(250,247,244,.92);display:flex;align-items:center;justify-content:center;transform:scale(.5);transition:transform .3s;font-size:16px;}
+.gal-item:hover .ov-icon{transform:scale(1);}
+.gal-sh{position:absolute;top:0;left:-80%;width:55%;height:100%;background:linear-gradient(105deg,transparent,rgba(255,255,255,.3),transparent);transform:skewX(-15deg);pointer-events:none;}
+.gal-item:hover .gal-sh{left:150%;transition:left .65s ease;}
+.stats-row{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:rgba(42,32,48,.1);border-radius:3px;overflow:hidden;margin-top:2.5rem;}
+.stat{background:var(--crema);padding:1.4rem;text-align:center;}
+.stat-n{font-family:'Cormorant Garamond',serif;font-size:38px;font-weight:300;background:linear-gradient(135deg,var(--dorado),var(--rosa));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;line-height:1;margin-bottom:.2rem;}
+.stat-l{font-size:10px;font-weight:400;letter-spacing:.15em;text-transform:uppercase;color:var(--texto3);}
+
+/* LIGHTBOX */
+.lb{position:fixed;inset:0;background:rgba(26,21,32,.96);z-index:200;display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .3s;backdrop-filter:blur(8px);}
+.lb.open{opacity:1;pointer-events:all;}
+.lb-box{max-width:480px;width:90%;background:var(--crema);border-radius:3px;overflow:hidden;transform:scale(.9);transition:transform .3s;}
+.lb.open .lb-box{transform:scale(1);}
+.lb-img{width:100%;height:300px;background:var(--crema2);position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center;}
+.lb-img img{width:100%;height:100%;object-fit:cover;}
+.lb-img .lb-ph{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:48px;opacity:.15;}
+.lb-close{position:absolute;top:1rem;right:1rem;width:32px;height:32px;border-radius:50%;background:rgba(250,247,244,.9);border:none;cursor:none;display:flex;align-items:center;justify-content:center;font-size:14px;color:var(--texto);transition:all .2s;font-family:'Montserrat',sans-serif;}
+.lb-close:hover{background:var(--crema);transform:scale(1.1);}
+.lb-body{padding:1.4rem 1.6rem;}
+.lb-title{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:400;color:var(--negro);margin-bottom:.4rem;}
+.lb-desc{font-size:13px;font-weight:400;color:var(--texto2);line-height:1.7;margin-bottom:1.2rem;}
+.lb-btn{display:inline-flex;align-items:center;gap:8px;font-size:10px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:var(--crema);background:var(--negro);padding:11px 20px;border-radius:2px;border:none;cursor:none;font-family:'Montserrat',sans-serif;transition:all .3s;}
+.lb-btn:hover{background:var(--rosa);}
+
+/* ─── TESTIMONIOS ─────────────────────────────────────────── */
+#testimonios{background:var(--crema);}
+.rating-bar{display:flex;align-items:center;gap:14px;padding:1.2rem 1.5rem;background:var(--crema2);border-radius:4px;border-left:3px solid var(--dorado);margin-bottom:2.8rem;}
+.stars-big{display:flex;gap:3px;}
+.star-b{color:var(--dorado);font-size:20px;line-height:1;}
+.rating-info strong{font-size:17px;font-weight:600;color:var(--negro);display:block;line-height:1.2;}
+.rating-info span{font-size:13px;font-weight:400;color:var(--texto2);}
+.test-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px;margin-bottom:2.5rem;}
+.t-card{background:var(--blanco);border:1px solid var(--crema3);border-radius:6px;padding:1.7rem;position:relative;transition:all .35s cubic-bezier(.23,1,.32,1);}
+.t-card:hover{border-color:rgba(201,168,76,.3);transform:translateY(-4px);box-shadow:0 12px 40px rgba(0,0,0,.07);}
+.t-card.dest{background:linear-gradient(145deg,#fff,#fdf5f7);border-color:rgba(196,99,126,.25);}
+.t-card.dest:hover{border-color:rgba(196,99,126,.5);}
+.t-quote{position:absolute;top:.8rem;right:1.2rem;font-family:'Cormorant Garamond',serif;font-size:70px;font-weight:300;line-height:1;color:rgba(201,168,76,.1);user-select:none;}
+.t-card.dest .t-quote{color:rgba(196,99,126,.1);}
+.t-stars{display:flex;gap:3px;margin-bottom:.9rem;}
+.t-star{color:var(--dorado);font-size:14px;}
+.t-srv{display:inline-block;font-size:10px;font-weight:500;letter-spacing:.12em;text-transform:uppercase;padding:4px 10px;border-radius:20px;background:var(--crema2);color:var(--texto3);margin-bottom:1rem;}
+.t-card.dest .t-srv{background:var(--rosa-suave);color:var(--rosa);}
+.t-text{font-size:15px;font-weight:400;line-height:1.78;color:var(--texto);margin-bottom:1.4rem;}
+.t-autor{display:flex;align-items:center;gap:10px;padding-top:1.1rem;border-top:1px solid var(--crema3);}
+.t-av{width:42px;height:42px;border-radius:50%;background:var(--crema2);display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:600;color:var(--texto2);flex-shrink:0;border:2px solid var(--crema3);}
+.t-card.dest .t-av{background:var(--rosa-suave);color:var(--rosa);border-color:rgba(196,99,126,.2);}
+.t-name{font-size:14px;font-weight:600;color:var(--negro);line-height:1.2;}
+.t-detail{font-size:11px;font-weight:400;color:var(--texto3);margin-top:2px;display:flex;align-items:center;gap:5px;}
+
+/* CARRUSEL MENCIONES */
+.mention-label{font-size:10px;font-weight:600;letter-spacing:.28em;text-transform:uppercase;color:var(--texto3);margin-bottom:1rem;}
+.mention-wrap{overflow:hidden;mask:linear-gradient(90deg,transparent,black 8%,black 92%,transparent);-webkit-mask:linear-gradient(90deg,transparent,black 8%,black 92%,transparent);}
+.mention-track{display:flex;gap:10px;animation:scroll 30s linear infinite;width:max-content;}
+.mention-track:hover{animation-play-state:paused;}
+.m-pill{display:flex;align-items:center;gap:8px;padding:10px 15px;background:var(--blanco);border:1px solid var(--crema3);border-radius:4px;white-space:nowrap;flex-shrink:0;transition:border-color .2s;}
+.m-pill:hover{border-color:rgba(196,99,126,.3);}
+.m-av{width:28px;height:28px;border-radius:50%;background:var(--rosa-suave);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;color:var(--rosa);flex-shrink:0;}
+.m-user{font-size:12px;font-weight:600;color:var(--negro);line-height:1.2;}
+.m-msg{font-size:11px;font-weight:400;color:var(--texto3);max-width:180px;overflow:hidden;text-overflow:ellipsis;}
+.test-cta{text-align:center;margin-top:3rem;}
+.test-cta p{font-size:15px;font-weight:400;line-height:1.75;color:var(--texto2);margin-bottom:1.4rem;}
+.btn-negro{display:inline-flex;align-items:center;gap:10px;background:var(--negro);color:var(--crema);font-family:'Montserrat',sans-serif;font-size:11px;font-weight:600;letter-spacing:.2em;text-transform:uppercase;padding:15px 30px;border-radius:3px;text-decoration:none;cursor:none;transition:all .3s;}
+.btn-negro:hover{background:var(--rosa);transform:translateY(-2px);box-shadow:0 10px 30px rgba(196,99,126,.25);}
+
+/* ─── CONTACTO / FOOTER ───────────────────────────────────── */
+#contacto{background:var(--negro);padding:5.5rem 2rem 0;}
+.contacto-inner{max-width:700px;margin:0 auto;text-align:center;}
+.c-tag{font-size:9px;font-weight:600;letter-spacing:.4em;text-transform:uppercase;color:var(--dorado);display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:.9rem;}
+.c-tag::before,.c-tag::after{content:'';width:26px;height:1.5px;background:var(--dorado);}
+.c-title{font-family:'Cormorant Garamond',serif;font-size:clamp(36px,5vw,60px);font-weight:300;color:var(--blanco);line-height:1.1;margin-bottom:2rem;}
+.c-title em{font-style:italic;color:var(--rosa-claro);}
+
+/* FOTO + NOMBRE en contacto */
+.c-author{display:flex;align-items:center;justify-content:center;gap:16px;margin-bottom:2.5rem;}
+.c-av{width:76px;height:76px;border-radius:50%;border:2px solid var(--dorado);overflow:hidden;flex-shrink:0;background:rgba(201,168,76,.1);display:flex;align-items:center;justify-content:center;}
+.c-av img{width:100%;height:100%;object-fit:cover;}
+.c-av .initials{font-family:'Cormorant Garamond',serif;font-size:24px;color:var(--dorado);}
+.c-author-info{text-align:left;}
+.c-name{font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:400;color:var(--blanco);line-height:1.2;}
+.c-role{font-size:10px;font-weight:400;letter-spacing:.22em;text-transform:uppercase;color:var(--dorado);margin-top:4px;}
+.c-horario{font-size:13px;font-weight:400;color:rgba(208,207,232,.6);letter-spacing:.05em;margin-bottom:2.5rem;line-height:1.8;}
+.c-horario strong{color:var(--plateado);font-weight:500;}
+.c-btns{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-bottom:3.5rem;}
+.c-divider{height:1px;background:linear-gradient(90deg,transparent,rgba(201,168,76,.25),transparent);margin-bottom:2rem;}
+footer{background:var(--negro);padding:1.5rem 2rem 2rem;text-align:center;}
+footer p{font-size:11px;font-weight:300;letter-spacing:.1em;color:rgba(208,207,232,.25);}
+
+/* WHATSAPP FLOTANTE */
+.wsp-float{
+  position:fixed;bottom:2rem;right:2rem;z-index:90;
+  width:54px;height:54px;border-radius:50%;
+  background:linear-gradient(135deg,#25d366,#128c7e);
+  display:flex;align-items:center;justify-content:center;
+  box-shadow:0 4px 20px rgba(37,211,102,.35);
+  text-decoration:none;cursor:none;
+  transition:all .3s;
+  animation:wFloat 3s ease-in-out infinite;
+}
+.wsp-float:hover{transform:scale(1.1);box-shadow:0 6px 28px rgba(37,211,102,.5);}
+
+/* ─── KEYFRAMES ───────────────────────────────────────────── */
+@keyframes fadeUp{from{opacity:0;transform:translateY(22px);}to{opacity:1;transform:translateY(0);}}
+@keyframes lineGrow{from{width:0;}to{width:200px;}}
+@keyframes pulse{0%,100%{opacity:.5;}50%{opacity:1;}}
+@keyframes scroll{from{transform:translateX(0);}to{transform:translateX(-50%);}}
+@keyframes wFloat{0%,100%{transform:translateY(0);}50%{transform:translateY(-6px);}}
+
+/* ─── RESPONSIVE ──────────────────────────────────────────── */
+@media(max-width:600px){
+  nav{padding:1rem 1.4rem;}
+  .section{padding:4rem 1.4rem 5rem;}
+  #contacto{padding:4rem 1.4rem 0;}
+  .hero-author{flex-direction:column;text-align:center;}
+  .author-info{text-align:center;}
+  .c-author{flex-direction:column;text-align:center;}
+  .c-author-info{text-align:center;}
+  .stats-row{grid-template-columns:1fr;}
+}
+</style>
+</head>
+<body>
+
+<!-- CURSOR -->
+<div id="cur"></div>
+<div id="cur-ring"></div>
+
+<!-- NAV -->
+<nav id="nav">
+  <a href="#hero" class="nav-logo">YC</a>
+  <div class="nav-links">
+    <a href="#servicios">Servicios</a>
+    <a href="#galeria">Portfolio</a>
+    <a href="#testimonios">Testimonios</a>
+    <a href="#contacto">Contacto</a>
+    <a href="https://wa.me/5491166648141?text=Hola%20Yamila!%20Quiero%20reservar%20un%20turno%20💅" class="nav-cta" target="_blank">Reservar turno</a>
+  </div>
+  <button class="nav-menu" id="navMenu" aria-label="Menú">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<!-- MOBILE NAV -->
+<div class="mobile-nav" id="mobileNav">
+  <a href="#servicios" onclick="closeMob()">Servicios</a>
+  <a href="#galeria" onclick="closeMob()">Portfolio</a>
+  <a href="#testimonios" onclick="closeMob()">Testimonios</a>
+  <a href="#contacto" onclick="closeMob()">Contacto</a>
+  <a href="https://wa.me/5491166648141?text=Hola%20Yamila!%20Quiero%20reservar%20un%20turno%20💅" target="_blank" onclick="closeMob()">Reservar turno</a>
+</div>
+
+<!-- ═══ HERO ════════════════════════════════════════════════ -->
+<section id="hero">
+  <div class="hero-glow glow1"></div>
+  <div class="hero-glow glow2"></div>
+  <canvas id="glitter"></canvas>
+  <div class="hero-content">
+    <p class="hero-eyebrow">Ciudad Madero &nbsp;·&nbsp; Nail Artist</p>
+    <h1 class="hero-title">
+      <span class="grad">YC Nails</span>
+      <em class="sub-it">Studio</em>
+    </h1>
+    <div class="hero-divider"></div>
+
+    <!-- FOTO + NOMBRE -->
+    <div class="hero-author">
+      <div class="author-avatar">
+        <!-- Reemplazá src con img/yamila.jpg cuando tengas la foto -->
+        <img src="yamila.png" alt="Yamila Cristini" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
+        <div class="initials" style="display:none;">YC</div>
+      </div>
+      <div class="author-info">
+        <div class="author-name">Yamila Cristini</div>
+        <div class="author-role">Nail Artist</div>
+      </div>
+    </div>
+
+    <p class="hero-tagline">Uñas que hablan antes que vos.<br>Arte, precisión y glamour en cada detalle.</p>
+    <div class="hero-pills">
+      <span class="pill star">✦ Kapping</span>
+      <span class="pill">Esculpidas</span>
+      <span class="pill">Semi permanente</span>
+      <span class="pill">Semi en pies</span>
+    </div>
+    <div class="hero-btns">
+      <a href="https://wa.me/5491166648141?text=Hola%20Yamila!%20Quiero%20reservar%20un%20turno%20💅" class="btn-gold" target="_blank">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.136.558 4.14 1.535 5.879L.057 23.5l5.752-1.507A11.946 11.946 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.9a9.9 9.9 0 01-5.031-1.371l-.36-.214-3.733.978.998-3.648-.235-.374A9.862 9.862 0 012.1 12C2.1 6.525 6.525 2.1 12 2.1S21.9 6.525 21.9 12 17.475 21.9 12 21.9z"/></svg>
+        Reservá tu turno
+      </a>
+      <a href="https://instagram.com/_yami.lc" class="btn-outline" target="_blank">@_yami.lc</a>
+    </div>
+  </div>
+  <div class="hero-location">Ciudad Madero, Buenos Aires</div>
+  <div class="scroll-hint">
+    <div class="scroll-txt">scroll</div>
+    <div class="scroll-line"></div>
+  </div>
+</section>
+
+<!-- ═══ SERVICIOS ════════════════════════════════════════════ -->
+<div id="servicios" style="background:var(--crema);">
+<div class="section reveal">
+  <div class="s-tag">Servicios</div>
+  <h2 class="s-title">Lo que <em>hacemos</em></h2>
+  <p class="s-sub">Cada servicio, una obra de arte. Cada clienta, una reina.</p>
+  <div class="srv-grid">
+
+    <div class="srv-card estrella">
+      <div class="shimmer"></div>
+      <div class="srv-num">01</div>
+      <div class="star-badge">✦ Servicio estrella</div>
+      <span class="srv-icon">💅</span>
+      <h3 class="srv-name">Kapping</h3>
+      <p class="srv-desc">La técnica favorita del estudio. Resultados naturales con durabilidad máxima. El equilibrio perfecto entre elegancia y resistencia.</p>
+      <ul class="srv-list">
+        <li>Acabado natural y ultrafino</li>
+        <li>Alta durabilidad y flexibilidad</li>
+        <li>Sin daño en la uña natural</li>
+        <li>Ideal para uso diario</li>
+      </ul>
+      <button class="srv-cta" onclick="window.open('https://wa.me/5491166648141?text=Hola%20Yamila!%20Me%20interesa%20el%20Kapping%20💅','_blank')">
+        Reservar turno <svg width="11" height="11" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
+      </button>
+    </div>
+
+    <div class="srv-card">
+      <div class="shimmer"></div>
+      <div class="srv-num">02</div>
+      <span class="srv-icon">✨</span>
+      <h3 class="srv-name">Esculpidas</h3>
+      <p class="srv-desc">Uñas moldeadas a mano, diseñadas para destacar. Forma, largo y arte en una sola sesión. Para las que no pasan desapercibidas.</p>
+      <ul class="srv-list">
+        <li>Diseños únicos y personalizados</li>
+        <li>Almendra, stiletto, cuadrada</li>
+        <li>Arte nail incluido</li>
+        <li>Larga duración garantizada</li>
+      </ul>
+      <button class="srv-cta" onclick="window.open('https://wa.me/5491166648141?text=Hola%20Yamila!%20Me%20interesan%20las%20Esculpidas%20💅','_blank')">
+        Reservar turno <svg width="11" height="11" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
+      </button>
+    </div>
+
+    <div class="srv-card">
+      <div class="shimmer"></div>
+      <div class="srv-num">03</div>
+      <span class="srv-icon">💎</span>
+      <h3 class="srv-name">Semi permanente</h3>
+      <p class="srv-desc">Color vibrante que dura semanas sin descascararse. Perfecto para mantener las manos siempre impecables.</p>
+      <ul class="srv-list">
+        <li>Hasta 3 semanas de duración</li>
+        <li>Paleta de colores amplia</li>
+        <li>Secado inmediato con lámpara</li>
+        <li>Sin daño en la uña natural</li>
+      </ul>
+      <button class="srv-cta" onclick="window.open('https://wa.me/5491166648141?text=Hola%20Yamila!%20Me%20interesa%20el%20Semi%20Permanente%20💅','_blank')">
+        Reservar turno <svg width="11" height="11" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
+      </button>
+    </div>
+
+    <div class="srv-card">
+      <div class="shimmer"></div>
+      <div class="srv-num">04</div>
+      <span class="srv-icon">🌸</span>
+      <h3 class="srv-name">Semi en pies</h3>
+      <p class="srv-desc">Porque los detalles importan de pies a cabeza. Pedicura con semi permanente para un look completo en cualquier temporada.</p>
+      <ul class="srv-list">
+        <li>Preparación y limpieza incluida</li>
+        <li>Color a elección</li>
+        <li>Larga duración en pies</li>
+        <li>Look completo manos + pies</li>
+      </ul>
+      <button class="srv-cta" onclick="window.open('https://wa.me/5491166648141?text=Hola%20Yamila!%20Me%20interesa%20el%20Semi%20en%20Pies%20💅','_blank')">
+        Reservar turno <svg width="11" height="11" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
+      </button>
+    </div>
+
+  </div>
+  <div class="srv-bottom">
+    <a href="https://wa.me/5491166648141?text=Hola%20Yamila!%20Quiero%20asesoramiento%20para%20elegir%20el%20servicio%20ideal%20💅" class="btn-outline-dark" target="_blank">
+      ¿No sabés cuál elegir? Consultá con Yamila
+    </a>
+  </div>
+</div>
+</div>
+
+<!-- ═══ GALERÍA ══════════════════════════════════════════════ -->
+<div id="galeria" style="background:var(--crema2);">
+<div class="section reveal">
+  <div class="gal-header">
+    <div>
+      <div class="s-tag">Portfolio</div>
+      <h2 class="s-title">Trabajos <em>realizados</em></h2>
+    </div>
+    <a href="https://instagram.com/_yami.lc" class="ig-link" target="_blank">
+      Ver todo en Instagram <svg width="11" height="11" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
+    </a>
+  </div>
+  <div class="filters">
+    <button class="fbtn on" onclick="filtrar('todos',this)">Todos</button>
+    <button class="fbtn" onclick="filtrar('kapping',this)">Kapping</button>
+    <button class="fbtn" onclick="filtrar('esculpidas',this)">Esculpidas</button>
+    <button class="fbtn" onclick="filtrar('semi',this)">Semi permanente</button>
+    <button class="fbtn" onclick="filtrar('pies',this)">Semi en pies</button>
+  </div>
+  <div class="masonry" id="gallery">
+
+    <div class="gal-item" data-cat="kapping" onclick="abrirLb('Kapping natural','Acabado ultrafino con durabilidad máxima. El favorito del estudio.','img/trabajo1.jpg')">
+      <div class="gal-ph">
+        <img src="1.jpg" alt="Kapping" onerror="this.style.display='none'">
+        <div class="ph-inner"><span>💅</span><small>trabajo 1</small></div>
+      </div>
+      <div class="gal-sh"></div>
+      <div class="gal-ov"><div class="ov-icon">👁</div></div>
+      <span class="gal-tag st">✦ Kapping</span>
+    </div>
+
+    <div class="gal-item" data-cat="esculpidas" onclick="abrirLb('Esculpidas stiletto','Arte total desde la forma. Diseño oscuro con glitter.','img/trabajo2.jpg')">
+      <div class="gal-ph">
+        <img src="2.jpg" alt="Esculpidas" onerror="this.style.display='none'">
+        <div class="ph-inner"><span>✨</span><small>trabajo 2</small></div>
+      </div>
+      <div class="gal-sh"></div>
+      <div class="gal-ov"><div class="ov-icon">👁</div></div>
+      <span class="gal-tag">Esculpidas</span>
+    </div>
+
+    <div class="gal-item" data-cat="semi" onclick="abrirLb('Semi permanente','Color vibrante que dura semanas. Paleta oscura con detalles.','img/trabajo3.jpg')">
+      <div class="gal-ph">
+        <img src="3.png" alt="Semi permanente" onerror="this.style.display='none'">
+        <div class="ph-inner"><span>💎</span><small>trabajo 3</small></div>
+      </div>
+      <div class="gal-sh"></div>
+      <div class="gal-ov"><div class="ov-icon">👁</div></div>
+      <span class="gal-tag">Semi permanente</span>
+    </div>
+
+    <div class="gal-item" data-cat="kapping" onclick="abrirLb('Kapping francesa','El clásico reinventado con el toque de Yamila.','img/trabajo4.jpg')">
+      <div class="gal-ph">
+        <img src="4.png" alt="Kapping francesa" onerror="this.style.display='none'">
+        <div class="ph-inner"><span>💅</span><small>trabajo 4</small></div>
+      </div>
+      <div class="gal-sh"></div>
+      <div class="gal-ov"><div class="ov-icon">👁</div></div>
+      <span class="gal-tag st">✦ Kapping</span>
+    </div>
+
+    <div class="gal-item" data-cat="esculpidas" onclick="abrirLb('Esculpidas con arte','Diseño con mariposas y glitter. Arte nail de autor.','img/trabajo5.jpg')">
+      <div class="gal-ph">
+        <img src="5.png" alt="Esculpidas arte" onerror="this.style.display='none'">
+        <div class="ph-inner"><span>🦋</span><small>trabajo 5</small></div>
+      </div>
+      <div class="gal-sh"></div>
+      <div class="gal-ov"><div class="ov-icon">👁</div></div>
+      <span class="gal-tag">Esculpidas</span>
+    </div>
+
+    <div class="gal-item" data-cat="pies" onclick="abrirLb('Semi en pies','Look completo de pies a cabeza. Impecable cada detalle.','img/trabajo6.jpg')">
+      <div class="gal-ph">
+        <img src="6.png" alt="Semi en pies" onerror="this.style.display='none'">
+        <div class="ph-inner"><span>🌸</span><small>trabajo 6</small></div>
+      </div>
+      <div class="gal-sh"></div>
+      <div class="gal-ov"><div class="ov-icon">👁</div></div>
+      <span class="gal-tag">Semi en pies</span>
+    </div>
+
+    <div class="gal-item" data-cat="semi" onclick="abrirLb('Semi rosa oscuro','Tonos oscuros con acabado espejo. Sofisticación pura.','img/trabajo7.jpg')">
+      <div class="gal-ph">
+        <img src="7.png" alt="Semi rosa" onerror="this.style.display='none'">
+        <div class="ph-inner"><span>🖤</span><small>trabajo 7</small></div>
+      </div>
+      <div class="gal-sh"></div>
+      <div class="gal-ov"><div class="ov-icon">👁</div></div>
+      <span class="gal-tag">Semi permanente</span>
+    </div>
+
+    <div class="gal-item" data-cat="kapping" onclick="abrirLb('Kapping glitter','Glitter y transparencia. El favorito de las novias.','img/trabajo8.jpg')">
+      <div class="gal-ph">
+        <img src="8.png" alt="Kapping glitter" onerror="this.style.display='none'">
+        <div class="ph-inner"><span>✨</span><small>trabajo 8</small></div>
+      </div>
+      <div class="gal-sh"></div>
+      <div class="gal-ov"><div class="ov-icon">👁</div></div>
+      <span class="gal-tag st">✦ Kapping</span>
+    </div>
+
+  </div>
+  <div class="stats-row">
+    <div class="stat"><div class="stat-n">100+</div><div class="stat-l">Trabajos realizados</div></div>
+    <div class="stat"><div class="stat-n">273</div><div class="stat-l">Seguidoras Instagram</div></div>
+    <div class="stat"><div class="stat-n">100%</div><div class="stat-l">Clientas satisfechas</div></div>
+  </div>
+</div>
+</div>
+
+<!-- LIGHTBOX -->
+<div class="lb" id="lb" onclick="cerrarLb(event)">
+  <div class="lb-box">
+    <div class="lb-img">
+      <img id="lb-img-el" src="" alt="" style="display:none;">
+      <div class="lb-ph" id="lb-ph">💅</div>
+      <button class="lb-close" onclick="cerrarLb({target:document.getElementById('lb')})">✕</button>
+    </div>
+    <div class="lb-body">
+      <h3 class="lb-title" id="lb-title">Título</h3>
+      <p class="lb-desc" id="lb-desc">Descripción</p>
+      <button class="lb-btn" onclick="window.open('https://wa.me/5491166648141?text=Hola%20Yamila!%20Vi%20tu%20trabajo%20en%20la%20web%20y%20quiero%20este%20diseño%20💅','_blank')">
+        Quiero este diseño <svg width="11" height="11" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ TESTIMONIOS ══════════════════════════════════════════ -->
+<div id="testimonios" style="background:var(--crema);">
+<div class="section reveal">
+  <div class="s-tag">Testimonios</div>
+  <h2 class="s-title">Lo que dicen <em>ellas</em></h2>
+  <p class="s-sub">Cada clienta, una historia. Esto es lo que dicen las que ya pasaron por el estudio.</p>
+
+  <div class="rating-bar">
+    <div class="stars-big">
+      <span class="star-b">★</span><span class="star-b">★</span><span class="star-b">★</span><span class="star-b">★</span><span class="star-b">★</span>
+    </div>
+    <div class="rating-info">
+      <strong>5 / 5 estrellas</strong>
+      <span>Calificación promedio de todas las clientas</span>
+    </div>
+  </div>
+
+  <div class="test-grid">
+
+    <div class="t-card dest">
+      <div class="t-quote">"</div>
+      <div class="t-stars"><span class="t-star">★</span><span class="t-star">★</span><span class="t-star">★</span><span class="t-star">★</span><span class="t-star">★</span></div>
+      <span class="t-srv">✦ Kapping</span>
+      <p class="t-text">"Fui a Yamila por primera vez y no voy a ir a ningún otro lugar más. Las uñas quedaron perfectas, duran un montón y ella es un amor de persona."</p>
+      <div class="t-autor">
+        <div class="t-av">SO</div>
+        <div>
+          <div class="t-name">Sol Ortega</div>
+          <div class="t-detail"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor"/></svg> Mención en Instagram</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="t-card">
+      <div class="t-quote">"</div>
+      <div class="t-stars"><span class="t-star">★</span><span class="t-star">★</span><span class="t-star">★</span><span class="t-star">★</span><span class="t-star">★</span></div>
+      <span class="t-srv">Esculpidas</span>
+      <p class="t-text">"Me hice las esculpidas para mi casamiento y quedé sin palabras. Todo el mundo me preguntó dónde me las había hecho. Yamila es un genio."</p>
+      <div class="t-autor">
+        <div class="t-av">MR</div>
+        <div>
+          <div class="t-name">Micaela Rodríguez</div>
+          <div class="t-detail">Clienta frecuente</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="t-card">
+      <div class="t-quote">"</div>
+      <div class="t-stars"><span class="t-star">★</span><span class="t-star">★</span><span class="t-star">★</span><span class="t-star">★</span><span class="t-star">★</span></div>
+      <span class="t-srv">Semi permanente</span>
+      <p class="t-text">"Tres semanas y las uñas como el primer día. No lo podía creer. Además el lugar es súper cómodo y ella te hace sentir muy bien."</p>
+      <div class="t-autor">
+        <div class="t-av">LG</div>
+        <div>
+          <div class="t-name">Lucía Gómez</div>
+          <div class="t-detail">Clienta frecuente</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="t-card dest">
+      <div class="t-quote">"</div>
+      <div class="t-stars"><span class="t-star">★</span><span class="t-star">★</span><span class="t-star">★</span><span class="t-star">★</span><span class="t-star">★</span></div>
+      <span class="t-srv">✦ Kapping</span>
+      <p class="t-text">"La mejor nail artist de Ciudad Madero, sin dudas. Tiene una paciencia y un talento increíble. Mis uñas nunca estuvieron tan lindas."</p>
+      <div class="t-autor">
+        <div class="t-av">VL</div>
+        <div>
+          <div class="t-name">Valentina López</div>
+          <div class="t-detail"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor"/></svg> Mención en Instagram</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="t-card">
+      <div class="t-quote">"</div>
+      <div class="t-stars"><span class="t-star">★</span><span class="t-star">★</span><span class="t-star">★</span><span class="t-star">★</span><span class="t-star">★</span></div>
+      <span class="t-srv">Semi en pies</span>
+      <p class="t-text">"Vine a hacerme el semi en pies y quedé tan conforme que me hice también las manos. Totalmente recomendable, se nota que le pone amor."</p>
+      <div class="t-autor">
+        <div class="t-av">CF</div>
+        <div>
+          <div class="t-name">Carolina Fernández</div>
+          <div class="t-detail">Primera vez en el estudio</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="t-card">
+      <div class="t-quote">"</div>
+      <div class="t-stars"><span class="t-star">★</span><span class="t-star">★</span><span class="t-star">★</span><span class="t-star">★</span><span class="t-star">★</span></div>
+      <span class="t-srv">Esculpidas</span>
+      <p class="t-text">"Le pedí un diseño complicado con mariposas y glitter y lo ejecutó a la perfección. Es muy detallista y se toma el tiempo para que quede impecable."</p>
+      <div class="t-autor">
+        <div class="t-av">AS</div>
+        <div>
+          <div class="t-name">Agustina Sosa</div>
+          <div class="t-detail">Clienta frecuente</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <p class="mention-label">Menciones en Instagram</p>
+  <div class="mention-wrap">
+    <div class="mention-track">
+      <div class="m-pill"><div class="m-av">JM</div><div><div class="m-user">@juli.martinez</div><div class="m-msg">Las mejores uñas que me hice en mi vida 💅</div></div></div>
+      <div class="m-pill"><div class="m-av">RB</div><div><div class="m-user">@ro.belen</div><div class="m-msg">Yamila es una artista, no hay más nada</div></div></div>
+      <div class="m-pill"><div class="m-av">NP</div><div><div class="m-user">@nati.paz_</div><div class="m-msg">3 semanas y siguen perfectas ✨</div></div></div>
+      <div class="m-pill"><div class="m-av">DF</div><div><div class="m-user">@dani.flores22</div><div class="m-msg">La mejor de Ciudad Madero sin dudas 🔥</div></div></div>
+      <div class="m-pill"><div class="m-av">MV</div><div><div class="m-user">@maru.vidal</div><div class="m-msg">Siempre vuelvo, imposible no hacerlo 🖤</div></div></div>
+      <div class="m-pill"><div class="m-av">PA</div><div><div class="m-user">@pau.acosta_</div><div class="m-msg">El kapping quedó espectacular, gracias Yami!</div></div></div>
+      <div class="m-pill"><div class="m-av">TS</div><div><div class="m-user">@tami.saenz</div><div class="m-msg">El lugar es divino y ella es un amor 🩷</div></div></div>
+      <div class="m-pill"><div class="m-av">EC</div><div><div class="m-user">@eli.campos</div><div class="m-msg">Recomendadísima, son obras de arte</div></div></div>
+      <!-- duplicado loop -->
+      <div class="m-pill"><div class="m-av">JM</div><div><div class="m-user">@juli.martinez</div><div class="m-msg">Las mejores uñas que me hice en mi vida 💅</div></div></div>
+      <div class="m-pill"><div class="m-av">RB</div><div><div class="m-user">@ro.belen</div><div class="m-msg">Yamila es una artista, no hay más nada</div></div></div>
+      <div class="m-pill"><div class="m-av">NP</div><div><div class="m-user">@nati.paz_</div><div class="m-msg">3 semanas y siguen perfectas ✨</div></div></div>
+      <div class="m-pill"><div class="m-av">DF</div><div><div class="m-user">@dani.flores22</div><div class="m-msg">La mejor de Ciudad Madero sin dudas 🔥</div></div></div>
+      <div class="m-pill"><div class="m-av">MV</div><div><div class="m-user">@maru.vidal</div><div class="m-msg">Siempre vuelvo, imposible no hacerlo 🖤</div></div></div>
+      <div class="m-pill"><div class="m-av">PA</div><div><div class="m-user">@pau.acosta_</div><div class="m-msg">El kapping quedó espectacular, gracias Yami!</div></div></div>
+      <div class="m-pill"><div class="m-av">TS</div><div><div class="m-user">@tami.saenz</div><div class="m-msg">El lugar es divino y ella es un amor 🩷</div></div></div>
+      <div class="m-pill"><div class="m-av">EC</div><div><div class="m-user">@eli.campos</div><div class="m-msg">Recomendadísima, son obras de arte</div></div></div>
+    </div>
+  </div>
+
+  <div class="test-cta">
+    <p>¿Querés ser la próxima clienta feliz?<br>Reservá tu turno hoy mismo.</p>
+    <a href="https://wa.me/5491166648141?text=Hola%20Yamila!%20Vi%20los%20testimonios%20y%20quiero%20reservar%20un%20turno%20💅" class="btn-negro" target="_blank">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.136.558 4.14 1.535 5.879L.057 23.5l5.752-1.507A11.946 11.946 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.9a9.9 9.9 0 01-5.031-1.371l-.36-.214-3.733.978.998-3.648-.235-.374A9.862 9.862 0 012.1 12C2.1 6.525 6.525 2.1 12 2.1S21.9 6.525 21.9 12 17.475 21.9 12 21.9z"/></svg>
+      Reservar mi turno
+    </a>
+  </div>
+</div>
+</div>
+
+<!-- ═══ CONTACTO ══════════════════════════════════════════════ -->
+<div id="contacto">
+<div class="contacto-inner reveal">
+  <div class="c-tag">Contacto</div>
+  <h2 class="c-title">¿Hablamos y<br>agendamos tu <em>turno</em>?</h2>
+
+  <!-- FOTO + NOMBRE en contacto -->
+  <div class="c-author">
+    <div class="c-av">
+      <img src="yamila.png" alt="Yamila Cristini" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
+      <div class="initials" style="display:none;">YC</div>
+    </div>
+    <div class="c-author-info">
+      <div class="c-name">Yamila Cristini</div>
+      <div class="c-role">Nail Artist · Ciudad Madero</div>
+    </div>
+  </div>
+
+  <p class="c-horario">
+    <strong>Lunes a Viernes</strong> · Horario a confirmar<br>
+    <strong>Sábados</strong> · Horario a confirmar<br>
+    Ciudad Madero, Buenos Aires
+  </p>
+  <div class="c-btns">
+    <a href="https://wa.me/5491166648141?text=Hola%20Yamila!%20Quiero%20reservar%20un%20turno%20💅" class="btn-gold" target="_blank">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.136.558 4.14 1.535 5.879L.057 23.5l5.752-1.507A11.946 11.946 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.9a9.9 9.9 0 01-5.031-1.371l-.36-.214-3.733.978.998-3.648-.235-.374A9.862 9.862 0 012.1 12C2.1 6.525 6.525 2.1 12 2.1S21.9 6.525 21.9 12 17.475 21.9 12 21.9z"/></svg>
+      Escribir por WhatsApp
+    </a>
+    <a href="https://instagram.com/_yami.lc" class="btn-outline" target="_blank">@_yami.lc</a>
+  </div>
+  <div class="c-divider"></div>
+</div>
+<footer>
+  <p>© 2025 YC Nails Studio · Yamila Cristini · Ciudad Madero, Buenos Aires</p>
+</footer>
+</div>
+
+<!-- WHATSAPP FLOTANTE -->
+<a href="https://wa.me/5491166648141?text=Hola%20Yamila!%20Quiero%20reservar%20un%20turno%20💅" class="wsp-float" target="_blank" aria-label="WhatsApp">
+  <svg width="26" height="26" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.136.558 4.14 1.535 5.879L.057 23.5l5.752-1.507A11.946 11.946 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.9a9.9 9.9 0 01-5.031-1.371l-.36-.214-3.733.978.998-3.648-.235-.374A9.862 9.862 0 012.1 12C2.1 6.525 6.525 2.1 12 2.1S21.9 6.525 21.9 12 17.475 21.9 12 21.9z"/></svg>
+</a>
+
+<script>
+/* CURSOR */
+const cur=document.getElementById('cur'),ring=document.getElementById('cur-ring');
+let mx=0,my=0,rx=0,ry=0;
+document.addEventListener('mousemove',e=>{
+  mx=e.clientX;my=e.clientY;
+  cur.style.left=mx+'px';cur.style.top=my+'px';
+});
+(function animRing(){rx+=(mx-rx)*.12;ry+=(my-ry)*.12;ring.style.left=rx+'px';ring.style.top=ry+'px';requestAnimationFrame(animRing);})();
+document.querySelectorAll('a,button,.srv-card,.gal-item,.t-card').forEach(el=>{
+  el.addEventListener('mouseenter',()=>{cur.style.transform='translate(-50%,-50%) scale(2)';ring.style.transform='translate(-50%,-50%) scale(1.5)';ring.style.borderColor='rgba(232,160,180,.7)';});
+  el.addEventListener('mouseleave',()=>{cur.style.transform='translate(-50%,-50%) scale(1)';ring.style.transform='translate(-50%,-50%) scale(1)';ring.style.borderColor='rgba(201,168,76,.4)';});
+});
+
+/* GLITTER CANVAS */
+const canvas=document.getElementById('glitter'),ctx=canvas.getContext('2d');
+let W,H,parts=[];
+function resize(){W=canvas.width=window.innerWidth;H=canvas.height=document.getElementById('hero').offsetHeight;}
+resize();window.addEventListener('resize',resize);
+const cols=['rgba(201,168,76,','rgba(232,160,180,','rgba(208,207,232,','rgba(232,204,122,'];
+function mkP(x,y){return{x:x||Math.random()*W,y:y||Math.random()*H*.5,sz:Math.random()*2+.5,vx:(Math.random()-.5)*.4,vy:Math.random()*.7+.2,op:Math.random()*.6+.3,fade:Math.random()*.004+.002,col:cols[Math.floor(Math.random()*cols.length)],rot:Math.random()*Math.PI*2,rs:(Math.random()-.5)*.04};}
+for(let i=0;i<100;i++)parts.push(mkP());
+(function draw(){
+  ctx.clearRect(0,0,W,H);
+  parts.forEach((p,i)=>{
+    p.x+=p.vx;p.y+=p.vy;p.rot+=p.rs;p.op-=p.fade;
+    ctx.save();ctx.translate(p.x,p.y);ctx.rotate(p.rot);ctx.globalAlpha=Math.max(0,p.op);
+    if(p.sz>1.2){ctx.fillStyle=p.col+'.9)';ctx.beginPath();for(let k=0;k<4;k++){const a=k*Math.PI/2;if(k===0)ctx.moveTo(Math.cos(a)*p.sz,Math.sin(a)*p.sz);else ctx.lineTo(Math.cos(a)*p.sz,Math.sin(a)*p.sz);ctx.lineTo(Math.cos(a+Math.PI/4)*p.sz*.35,Math.sin(a+Math.PI/4)*p.sz*.35);}ctx.closePath();ctx.fill();}
+    else{ctx.fillStyle=p.col+'.9)';ctx.fillRect(-p.sz/2,-p.sz/2,p.sz,p.sz);}
+    ctx.restore();
+    if(p.op<=0||p.y>H+10)parts[i]=mkP();
+  });
+  requestAnimationFrame(draw);
+})();
+
+/* NAV SCROLL */
+window.addEventListener('scroll',()=>{document.getElementById('nav').classList.toggle('scrolled',window.scrollY>60);});
+
+/* MOBILE NAV */
+const mob=document.getElementById('mobileNav');
+document.getElementById('navMenu').addEventListener('click',()=>mob.classList.toggle('open'));
+function closeMob(){mob.classList.remove('open');}
+
+/* FILTROS GALERÍA */
+function filtrar(cat,btn){
+  document.querySelectorAll('.fbtn').forEach(b=>b.classList.remove('on'));
+  btn.classList.add('on');
+  document.querySelectorAll('.gal-item').forEach(it=>{
+    it.style.opacity=(cat==='todos'||it.dataset.cat===cat)?'1':'0.18';
+  });
+}
+
+/* LIGHTBOX */
+function abrirLb(t,d,src){
+  document.getElementById('lb-title').textContent=t;
+  document.getElementById('lb-desc').textContent=d;
+  const img=document.getElementById('lb-img-el'),ph=document.getElementById('lb-ph');
+  img.src=src;img.onload=()=>{img.style.display='block';ph.style.display='none';};
+  img.onerror=()=>{img.style.display='none';ph.style.display='flex';};
+  document.getElementById('lb').classList.add('open');
+  document.body.style.overflow='hidden';
+}
+function cerrarLb(e){
+  if(!e||e.target===document.getElementById('lb')||e.currentTarget.classList.contains('lb-close')){
+    document.getElementById('lb').classList.remove('open');
+    document.body.style.overflow='';
+  }
+}
+document.addEventListener('keydown',e=>{if(e.key==='Escape')cerrarLb(null);});
+
+/* REVEAL ON SCROLL */
+const observer=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('visible');});},{threshold:.1});
+document.querySelectorAll('.reveal').forEach(el=>observer.observe(el));
+</script>
+</body>
+</html>
